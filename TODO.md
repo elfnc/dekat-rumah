@@ -32,12 +32,12 @@
     - [x] `Umkm` (Relation: Category 1-N UMKM)
     - [x] `Product` (Relation: UMKM 1-N Product)
 - [x] Seed Initial Admin Data
-- [ ] Setup NextAuth (Credentials Provider)
+- [x] Setup NextAuth (Credentials Provider)
 - [ ] Setup Image Upload (Supabase Storage / Uploadthing)
 
 ### Admin UI
-- [ ] Login Page (`/login`)
-- [ ] Admin Dashboard Layout (Sidebar + Protected Route)
+- [x] Login Page (`/login`)
+- [x] Admin Dashboard Layout (Sidebar + Protected Route)
 - [ ] **UMKM Management:**
     - [ ] Create/Edit Form (Zod Validation)
     - [ ] List View (Table)
