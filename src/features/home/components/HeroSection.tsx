@@ -1,48 +1,96 @@
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ArrowRight, ShoppingBag } from "lucide-react"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, Store } from "lucide-react"
+import { COPY } from "@/lib/copywritting"
 
-export function HeroSection() {
+// Kita butuh data produk buat grid visual kanan
+interface HeroProduct {
+  id: string
+  imageUrl: string | null
+  name: string
+}
+
+interface HeroSectionProps {
+  products: HeroProduct[]
+}
+
+export function HeroSection({ products }: HeroSectionProps) {
+  // Ambil 6 produk pertama untuk grid visual
+  const heroProducts = products.slice(0, 6)
+
   return (
-    <section className="relative overflow-hidden bg-secondary border-b border-border/50">
-      {/* Background Pattern: Fixed Syntax */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[length:24px_24px]"></div>
-      
-      <div className="container relative mx-auto px-4 py-20 md:py-32 flex flex-col items-center text-center">
-        
-        <div className="mb-6 inline-flex items-center rounded-full border border-primary/20 bg-white/50 px-3 py-1 text-sm text-primary backdrop-blur-sm">
-          <span className="flex h-2 w-2 rounded-full bg-accent mr-2 animate-pulse"></span>
-          Marketplace Warga Gunung Putri
-        </div>
+    <section className="relative w-full bg-white min-h-[80vh] flex items-center overflow-hidden border-b border-border/20">
+      <div className="container mx-auto px-4 md:px-6 h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center h-full py-12 lg:py-0">
+          
+          {/* KIRI: CONTENT */}
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-8 z-10">
+            <div className="space-y-4">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#1C1C1C] leading-[1.1] whitespace-pre-line">
+                {COPY.HERO.HEADLINE}
+              </h1>
+              <p className="text-lg sm:text-xl text-muted-foreground max-w-lg mx-auto lg:mx-0 leading-relaxed whitespace-pre-line">
+                {COPY.HERO.SUBHEADLINE}
+              </p>
+            </div>
 
-        <h1 className="text-4xl font-extrabold tracking-tight text-primary md:text-6xl lg:text-7xl mb-6 leading-tight">
-          Support Tetangga,<br />
-          <span className="text-foreground relative">
-            Hidupkan Ekonomi.
-            <svg className="absolute w-full h-3 -bottom-1 left-0 text-accent opacity-60" viewBox="0 0 100 10" preserveAspectRatio="none">
-               <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none" />
-            </svg>
-          </span>
-        </h1>
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <Button 
+                size="lg" 
+                className="bg-[#1F3D2B] hover:bg-[#1F3D2B]/90 text-white rounded-full h-12 px-8 text-base font-semibold shadow-xl shadow-[#1F3D2B]/20"
+                asChild
+              >
+                <Link href="#search-section">
+                  {COPY.HERO.CTA_PRIMARY}
+                </Link>
+              </Button>
+              
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="rounded-full h-12 px-8 text-base border-input hover:bg-secondary text-foreground"
+                asChild
+              >
+                <Link href="https://wa.me/..." target="_blank">
+                  <Store className="mr-2 h-4 w-4" />
+                  {COPY.HERO.CTA_SECONDARY}
+                </Link>
+              </Button>
+            </div>
+          </div>
 
-        <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-          Temukan makanan enak, kerajinan tangan, dan jasa terpercaya langsung dari warga sekitar. 
-          Tanpa aplikasi ribet, pesan langsung via WhatsApp.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-          <Button size="lg" className="rounded-full px-8 h-14 text-base shadow-xl shadow-primary/10 transition-transform hover:scale-105" asChild>
-            <Link href="/produk">
-              <ShoppingBag className="mr-2 h-5 w-5" />
-              Mulai Belanja
-            </Link>
-          </Button>
-          <Button size="lg" variant="outline" className="rounded-full px-8 h-14 text-base bg-white/60 hover:bg-white border-primary/20" asChild>
-            <Link href="/dukung-umkm-lokal">
-              Daftarkan Usaha
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
+          {/* KANAN: VISUAL GRID (4-6 Produk) */}
+          <div className="relative hidden lg:block h-full min-h-[500px]">
+             {/* Background Blob Halus */}
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#F4F1EC] rounded-full blur-3xl opacity-60 -z-10" />
+             
+             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 transform rotate-2 hover:rotate-0 transition-transform duration-700 ease-out">
+                {heroProducts.map((product, idx) => (
+                  <div 
+                    key={product.id} 
+                    className={`relative aspect-[4/5] overflow-hidden rounded-2xl bg-white shadow-sm border border-black/5 hover:shadow-md transition-shadow
+                      ${idx % 2 === 0 ? 'translate-y-4' : '-translate-y-4'} // Efek naik turun dikit
+                    `}
+                  >
+                    {product.imageUrl ? (
+                      <Image 
+                        src={product.imageUrl} 
+                        alt={product.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-secondary flex items-center justify-center text-muted-foreground text-xs">
+                        No Image
+                      </div>
+                    )}
+                  </div>
+                ))}
+             </div>
+          </div>
+
         </div>
       </div>
     </section>

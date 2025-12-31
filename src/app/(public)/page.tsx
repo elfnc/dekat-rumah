@@ -1,33 +1,36 @@
 import { Suspense } from "react"
-import { HeroSection } from "@/features/home/components/HeroSection"
-import { CategoryRail } from "@/features/home/components/CategoryRail"
-import { CtaJoin } from "@/features/home/components/CtaJoin"
-import { ProductCard } from "@/features/products/components/ProductCard"
-import { getFeaturedProducts } from "@/features/products/server/getProduct"
+import { ProductCardSkeleton } from "@/components/ui/skeleton-card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ArrowRight, Store } from "lucide-react"
-import { ProductCardSkeleton } from "@/components/ui/skeleton-card"
+import { getFeaturedProducts } from "@/features/products/server/getProduct"
+import { ProductCard } from "@/features/products/components/ProductCard"
 import { getFeaturedUmkms } from "@/features/umkm/server/getUmkm"
 import { UmkmCard } from "@/features/umkm/components/UmkmCard"
+import { EventBanner } from "@/features/home/components/EventBanner"
+import { HeroSection } from "@/features/home/components/HeroSection"
+import { CtaRegister } from "@/features/home/components/CtaJoin"
+import { SupportSection } from "@/features/home/components/SupportSection"
+import { SearchCategorySection } from "@/features/home/components/SearchCategory"
+import { COPY } from "@/lib/copywritting"
 
-// Komponen Async untuk Fetch Data
+// Dummy Event Data (Nanti bisa dari DB)
+// Coba ubah isActive: false untuk ngetes auto-hide
+const ACTIVE_EVENT = {
+  title: "Pasar Kaget Minggu Ini!",
+  description: "Diskon jajanan pasar di Lapangan Desa, Minggu 07.00 WIB.",
+  link: "/event/pasar-kaget",
+  isActive: true 
+}
+
+// --- SUB COMPONENTS (Untuk Rapikan Code) ---
+
 async function FeaturedProductList() {
-  // Simulate delay biar kelihatan skeletonnya (Hapus nanti pas production)
-  // await new Promise(resolve => setTimeout(resolve, 1000)) 
-  
   const products = await getFeaturedProducts()
-
-  if (products.length === 0) {
-    return (
-      <div className="col-span-full py-12 text-center text-muted-foreground bg-secondary/30 rounded-xl border border-dashed border-border">
-        <p>Belum ada produk unggulan saat ini.</p>
-      </div>
-    )
-  }
+  if (products.length === 0) return <div className="text-center py-10 text-muted-foreground">Belum ada produk.</div>
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-8">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-6">
       {products.map((product) => (
         <ProductCard
           key={product.id}
@@ -46,11 +49,10 @@ async function FeaturedProductList() {
 
 async function FeaturedUmkmList() {
   const umkms = await getFeaturedUmkms()
-
   if (umkms.length === 0) return null
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {umkms.map((umkm) => (
         <UmkmCard
           key={umkm.id}
@@ -66,85 +68,89 @@ async function FeaturedUmkmList() {
   )
 }
 
-export default function HomePage() {
+// --- MAIN PAGE ---
+
+export default async function HomePage() {
+  // Fetch produk untuk Visual Hero
+  // Kita ambil 6 produk pertama biar grid-nya penuh
+  const productsForHero = await getFeaturedProducts()
+
   return (
     <div className="flex flex-col min-h-screen">
-      <HeroSection />
+      {/* Banner */}
+      <EventBanner event={ACTIVE_EVENT} />
+
+      {/* 1. HERO SECTION (White Background) */}
+      <HeroSection products={productsForHero} />
+
+      {/* 2. SEARCH & CATEGORY (Sand Background) */}
+      {/* CategoryRail lama dihapus, diganti section ini */}
+      <SearchCategorySection />
       
-      {/* Sticky Category Rail */}
-      <CategoryRail />
-      
+      {/* 3. PRODUK UNGGULAN */}
       <section className="container mx-auto px-4 py-16 md:px-6 space-y-8">
-        <div className="flex items-end justify-between">
+        <div className="flex items-end justify-between border-b pb-4">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-primary md:text-3xl">
-              Terbaru dari Warga
+            <h2 className="text-2xl font-bold tracking-tight text-[#1C1C1C]">
+              {COPY.FEATURED_PRODUCTS.TITLE}
             </h2>
-            <p className="mt-2 text-muted-foreground max-w-lg">
-              Support usaha lokal di sekitar kita. Kualitas terjamin, harga tetangga.
+            <p className="text-muted-foreground mt-1">
+              {COPY.FEATURED_PRODUCTS.SUBTITLE}
             </p>
           </div>
-          <Button variant="link" asChild className="hidden md:flex text-primary hover:text-accent p-0 font-semibold">
+          <Button variant="link" asChild className="hidden md:flex text-[#1F3D2B] font-semibold hover:text-[#1F3D2B]/80">
             <Link href="/produk">
               Lihat Semua <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
         </div>
 
-        {/* SUSPENSE: Bagian ini akan loading terpisah */}
         <Suspense fallback={
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-8">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
             {[...Array(8)].map((_, i) => <ProductCardSkeleton key={i} />)}
           </div>
         }>
           <FeaturedProductList />
         </Suspense>
 
-        {/* Tombol Mobile */}
-        <div className="md:hidden pt-4">
+        <div className="md:hidden">
             <Button className="w-full" variant="outline" asChild>
                 <Link href="/produk">Lihat Semua Katalog</Link>
             </Button>
         </div>
       </section>
 
-      {/* SECTION 2: UMKM LOKAL (BARU) */}
-      <section className="bg-secondary/30 border-y border-border/50 py-16">
+      {/* 4. UMKM LOKAL */}
+      <section className="bg-[#F4F1EC] border-y border-[#E6E3DF] py-16">
         <div className="container mx-auto px-4 md:px-6 space-y-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-white rounded-lg shadow-sm">
-                <Store className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold tracking-tight text-primary">
-                  Warung & Jasa Sekitar
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Langganan tetangga sendiri, lebih hemat ongkir.
-                </p>
-              </div>
-            </div>
-            <Button variant="outline" asChild className="hidden md:flex">
-              <Link href="/umkm">Lihat Semua UMKM</Link>
-            </Button>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+             <div className="flex items-center gap-3">
+                <div className="h-12 w-12 rounded-xl bg-[#1F3D2B] flex items-center justify-center text-white shadow-lg shadow-[#1F3D2B]/20">
+                  <Store className="h-6 w-6" />
+                </div>
+                <div>
+                   <h2 className="text-2xl font-bold tracking-tight text-[#1C1C1C]">
+                     {COPY.UMKM_SECTION.TITLE}
+                   </h2>
+                   <p className="text-sm text-muted-foreground">
+                     {COPY.UMKM_SECTION.SUBTITLE}
+                   </p>
+                </div>
+             </div>
+             <Button variant="outline" className="bg-white border-[#E6E3DF]" asChild>
+                  <Link href="/umkm">Lihat Semua Warung</Link>
+             </Button>
           </div>
 
-          {/* Grid UMKM */}
-          <Suspense fallback={<div className="h-40 w-full bg-secondary animate-pulse rounded-xl" />}>
+          <Suspense fallback={<div className="h-40 bg-secondary animate-pulse rounded-xl" />}>
             <FeaturedUmkmList />
           </Suspense>
-          
-          <div className="md:hidden">
-              <Button className="w-full bg-white" variant="outline" asChild>
-                  <Link href="/umkm">Cari Warung Lainnya</Link>
-              </Button>
-          </div>
         </div>
       </section>
 
-      {/* CTA Gabung */}
-      <CtaJoin />
+      {/* CTA & SUPPORT */}
+      <CtaRegister />
+      <SupportSection />
     </div>
   )
 }

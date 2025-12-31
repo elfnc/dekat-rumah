@@ -14,3 +14,15 @@ export function formatRupiah(amount: number) {
     maximumFractionDigits: 0,
   }).format(amount)
 }
+
+export function generateSlug(text: string): string {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')     // Ganti spasi dengan dash
+    .replace(/[^\w\-]+/g, '') // Hapus karakter non-word
+    .replace(/\-\-+/g, '-')   // Ganti multiple dash dengan single dash
+    .replace(/^-+/, '')       // Trim dash di depan
+    .replace(/-+$/, '')       // Trim dash di belakang
+}

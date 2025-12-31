@@ -1,4 +1,5 @@
 import { PublicNavbar } from "@/components/layout/PublicNavbar"
+import { COPY } from "@/lib/copywritting"
 
 export default function PublicLayout({
   children,
@@ -11,9 +12,15 @@ export default function PublicLayout({
       <main className="flex-1">
         {children}
       </main>
-      <footer className="border-t bg-card py-6 text-center text-sm text-muted-foreground">
-        <div className="container">
-          <p>© {new Date().getFullYear()} Marketplace UMKM Gunung Putri. Dibangun oleh warga.</p>
+      <footer className="border-t border-[#E6E3DF] bg-white py-12 mt-auto">
+        <div className="container mx-auto px-4 text-center">
+            <h4 className="font-semibold text-[#1F3D2B] mb-2">{COPY.FOOTER.BRAND}</h4>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                {COPY.FOOTER.TAGLINE}
+            </p>
+            <div className="mt-8 text-xs text-muted-foreground/60">
+                &copy; {new Date().getFullYear()} Gunung Putri. Local Pride.
+            </div>
         </div>
       </footer>
     </div>

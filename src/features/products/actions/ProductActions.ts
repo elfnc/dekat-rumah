@@ -32,3 +32,22 @@ export async function deleteProduct(id: string) {
     return { error: "Gagal hapus produk" }
   }
 }
+
+// UPDATE
+export async function updateProduct(id: string, data: ProductFormValues) {
+  const validated = productSchema.safeParse(data)
+  if (!validated.success) return { error: "Data invalid" }
+
+  try {
+    await prisma.product.update({
+      where: { id },
+      data: validated.data
+    })
+    revalidatePath("/admin/products")
+    revalidatePath("/")
+    revalidatePath("/produk")
+    return { success: true }
+  } catch (error) {
+    return { error: "Gagal update produk" }
+  }
+}

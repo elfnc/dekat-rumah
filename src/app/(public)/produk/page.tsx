@@ -24,11 +24,15 @@ export async function generateMetadata({
 export default async function ProductListPage({
   searchParams,
 }: {
-  searchParams: { page?: string; category?: string; search?: string }
+  searchParams: Promise<{ page?: string; category?: string; search?: string }>
 }) {
-  const currentPage = Number(searchParams.page) || 1
-  const currentCategory = searchParams.category
-  const searchQuery = searchParams.search
+  // Await dulu
+  const params = await searchParams
+  
+  // Baru pakai
+  const currentPage = Number(params.page) || 1
+  const currentCategory = params.category
+  const searchQuery = params.search
 
   // Fetch Data Paralel (Categories & Products)
   const [categories, { products, metadata }] = await Promise.all([

@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { productSchema, ProductFormValues } from "@/lib/schemas"
-import { createProduct } from "../actions/ProductActions"
+import { createProduct, updateProduct } from "../actions/ProductActions"
 import { toast } from "sonner"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -16,41 +16,64 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from "@/components/ui/select"
+import { generateSlug } from "@/lib/utils"
+import { Product } from "@prisma/client"
 
 interface UmkmOption {
   id: string;
   name: string;
 }
 
-export function AdminProductForm({ umkms, onSuccess }: { umkms: UmkmOption[], onSuccess?: () => void }) {
+type ProductData = Omit<Product, "price"> & { price: any }
+
+interface AdminProductFormProps {
+    umkms: UmkmOption[]
+    onSuccess?: () => void
+    initialData?: ProductData | null // 👈 Tambah prop
+}
+
+export function AdminProductForm({ umkms, onSuccess, initialData }: AdminProductFormProps) {
   const [isLoading, setIsLoading] = useState(false)
 
-  // 🟢 FIX: Hapus generic <ProductFormValues> biar inference jalan otomatis
   const form = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      name: "",
-      slug: "",
-      description: "",
-      price: 0, 
-      umkmId: "",
-      imageUrl: "",
-      isActive: true
+      name: initialData?.name || "",
+      slug: initialData?.slug || "",
+      description: initialData?.description || "",
+      // Konversi Decimal/String ke Number
+      price: initialData ? Number(initialData.price) : 0, 
+      umkmId: initialData?.umkmId || "",
+      imageUrl: initialData?.imageUrl || "",
+      isActive: initialData?.isActive ?? true,
     }
   })
 
   async function onSubmit(data: ProductFormValues) {
     setIsLoading(true)
-    const result = await createProduct(data)
-    setIsLoading(false)
+    let result;
 
-    if (result.error) {
+    if (initialData) {
+       result = await updateProduct(initialData.id, data)
+    } else {
+       result = await createProduct(data)
+    }
+
+    setIsLoading(false)
+     if (result.error) {
       toast.error(result.error)
     } else {
-      toast.success("Produk berhasil ditambahkan")
-      form.reset()
+      toast.success(initialData ? "Produk Diupdate" : "Produk Dibuat")
+      if (!initialData) form.reset()
       if (onSuccess) onSuccess()
     }
+  }
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nameValue = e.target.value
+    form.setValue("name", nameValue)
+    // Tambahkan suffix random angka biar unik kalau nama produk pasaran
+    const slug = generateSlug(nameValue) + "-" + Math.floor(Math.random() * 1000)
+    form.setValue("slug", slug)
   }
 
   return (
@@ -89,13 +112,8 @@ export function AdminProductForm({ umkms, onSuccess }: { umkms: UmkmOption[], on
             <FormItem>
               <FormLabel>Nama Produk</FormLabel>
               <FormControl>
-                <Input placeholder="Nasi Uduk" {...field} 
-                  onChange={(e) => {
-                    field.onChange(e)
-                    const slug = e.target.value.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now().toString().slice(-4)
-                    form.setValue("slug", slug)
-                  }}
-                />
+                {/* Gunakan handleNameChange */}
+                <Input placeholder="Nasi Uduk" {...field} onChange={handleNameChange} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -196,8 +214,8 @@ export function AdminProductForm({ umkms, onSuccess }: { umkms: UmkmOption[], on
         />
 
         <Button type="submit" className="w-full" disabled={isLoading}>
-          Simpan Produk
-        </Button>
+        {initialData ? "Simpan Perubahan" : "Buat Produk Baru"}
+    </Button>
       </form>
     </Form>
   )

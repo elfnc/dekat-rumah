@@ -13,7 +13,7 @@ export async function createUmkm(data: UmkmFormValues){
 
     try {
         await prisma.umkm.create({
-            data: validated.data
+            data: {...validated.data}
         })
 
         revalidatePath("/admin/umkm")
@@ -32,5 +32,23 @@ export async function deleteUmkm(id: string) {
     return { success: true }
   } catch (error) {
     return { error: "Gagal menghapus UMKM" }
+  }
+}
+
+// UPDATE
+export async function updateUmkm(id: string, data: UmkmFormValues) {
+  const validated = umkmSchema.safeParse(data)
+  if (!validated.success) return { error: "Data tidak valid" }
+
+  try {
+    await prisma.umkm.update({
+      where: { id },
+      data: validated.data,
+    })
+    revalidatePath("/admin/umkm")
+    revalidatePath("/") // Refresh home juga
+    return { success: true }
+  } catch (error) {
+    return { error: "Gagal update UMKM" }
   }
 }

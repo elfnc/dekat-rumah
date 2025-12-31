@@ -8,7 +8,9 @@ export const umkmSchema = z.object({
     phone: z.string().min(10, "Nomor WA wajib (mis: 628...)").regex(/^62/, "Wajib format 62..."),
     address: z.string().optional(),
     imageUrl: z.string().optional(),
+    isActive: z.boolean().default(true),
 })
+
 
 export const productSchema = z.object({
   name: z.string().min(3, "Nama produk minimal 3 karakter"),
