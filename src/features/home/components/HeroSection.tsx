@@ -18,12 +18,14 @@ interface HeroSectionProps {
 
 export function HeroSection({ products }: HeroSectionProps) {
   // Ambil 4 produk pertama saja untuk grid 2x2
-  const heroProducts = products.slice(0, 4)
+  const heroProducts = [...products]
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 4)
 
   return (
     <section className="relative w-full bg-white min-h-150 lg:min-h-[80vh] flex items-center border-b border-border/40 overflow-hidden">
-      
-      {/* Background Decor (Optional: Subtle Gradient) */}
+
+      {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[#F4F1EC]/30 -z-10 skew-x-12 hidden lg:block" />
 
       <div className="container mx-auto px-4 md:px-6 h-full relative z-10">
@@ -31,8 +33,7 @@ export function HeroSection({ products }: HeroSectionProps) {
 
           {/* KIRI: CONTENT */}
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700">
-            
-            {/* Badge Kecil */}
+
             <Badge variant="secondary" className="px-4 py-1.5 rounded-full text-[#1F3D2B] bg-[#1F3D2B]/10 hover:bg-[#1F3D2B]/20 transition-colors">
               <MapPin className="w-3.5 h-3.5 mr-1.5" />
               Marketplace Warga Gunung Putri
@@ -73,31 +74,28 @@ export function HeroSection({ products }: HeroSectionProps) {
             </div>
           </div>
 
-          {/* KANAN: SINGLE FRAME VISUAL (Grid 2x2 Inside) */}
+          {/* KANAN: SINGLE FRAME VISUAL */}
           <div className="hidden lg:flex justify-center items-center relative">
-            {/* Shadow Blob dibelakang frame biar pop up */}
-            <div className="absolute inset-0 bg-linear-to-tr from-[#1F3D2B]/10 to-transparent rounded-[2.5rem] blur-2xl transform scale-95 translate-y-4 -z-10" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#1F3D2B]/10 to-transparent rounded-[2.5rem] blur-2xl transform scale-95 translate-y-4 -z-10" />
 
-            {/* THE FRAME */}
             <div className="relative w-full max-w-125 aspect-square rounded-[2.5rem] overflow-hidden border-8 border-white shadow-2xl bg-white">
-              
+
               {heroProducts.length > 0 ? (
                 <div className="grid grid-cols-2 grid-rows-2 h-full w-full gap-2 p-2 bg-gray-50">
-                  {/* Render 4 Kotak Gambar */}
+                  {/* Render 4 Kotak Gambar yang sudah diacak */}
                   {[0, 1, 2, 3].map((idx) => {
                     const product = heroProducts[idx]
                     return (
-                      <div key={idx} className="relative w-full h-full overflow-hidden rounded-2xl bg-gray-200">
+                      <div key={idx} className="relative w-full h-full overflow-hidden rounded-2xl bg-gray-200 group">
                         {product?.imageUrl ? (
                           <Image
                             src={product.imageUrl}
                             alt={product.name}
                             fill
-                            className="object-cover hover:scale-110 transition-transform duration-700"
+                            className="object-cover transition-transform duration-700 group-hover:scale-110"
                             sizes="(max-width: 1200px) 50vw, 33vw"
                           />
                         ) : (
-                          // Placeholder jika produk kurang dari 4
                           <div className="w-full h-full flex items-center justify-center bg-secondary/30 text-muted-foreground/30">
                             <Store className="h-8 w-8" />
                           </div>
@@ -107,19 +105,17 @@ export function HeroSection({ products }: HeroSectionProps) {
                   })}
                 </div>
               ) : (
-                // Fallback kalau belum ada produk sama sekali
                 <div className="w-full h-full bg-secondary/20 flex items-center justify-center flex-col gap-4 text-muted-foreground">
-                   <div className="bg-white p-4 rounded-full shadow-sm">
-                      <Store className="h-10 w-10 text-[#1F3D2B]" />
-                   </div>
-                   <p>Belum ada produk</p>
+                  <div className="bg-white p-4 rounded-full shadow-sm">
+                    <Store className="h-10 w-10 text-[#1F3D2B]" />
+                  </div>
+                  <p>Belum ada produk</p>
                 </div>
               )}
 
-              {/* Decorative Floating Label */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-5 py-2 rounded-full shadow-lg border border-gray-100 flex items-center gap-2 whitespace-nowrap">
-                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                 <span className="text-sm font-semibold text-[#1F3D2B]">Support Produk Lokal</span>
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-5 py-2 rounded-full shadow-lg border border-gray-100 flex items-center gap-2 whitespace-nowrap z-20">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-sm font-semibold text-[#1F3D2B]">Support Produk Lokal</span>
               </div>
 
             </div>

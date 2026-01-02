@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/select"
 import { generateSlug } from "@/lib/utils"
 import { Product } from "@prisma/client"
+// 👇 1. Import ImageUpload
+import { ImageUpload } from "@/components/shared/image-upload"
 
 interface UmkmOption {
   id: string;
@@ -27,9 +29,9 @@ interface UmkmOption {
 type ProductData = Omit<Product, "price"> & { price: any }
 
 interface AdminProductFormProps {
-    umkms: UmkmOption[]
-    onSuccess?: () => void
-    initialData?: ProductData | null // 👈 Tambah prop
+  umkms: UmkmOption[]
+  onSuccess?: () => void
+  initialData?: ProductData | null
 }
 
 export function AdminProductForm({ umkms, onSuccess, initialData }: AdminProductFormProps) {
@@ -41,8 +43,7 @@ export function AdminProductForm({ umkms, onSuccess, initialData }: AdminProduct
       name: initialData?.name || "",
       slug: initialData?.slug || "",
       description: initialData?.description || "",
-      // Konversi Decimal/String ke Number
-      price: initialData ? Number(initialData.price) : 0, 
+      price: initialData ? Number(initialData.price) : 0,
       umkmId: initialData?.umkmId || "",
       imageUrl: initialData?.imageUrl || "",
       isActive: initialData?.isActive ?? true,
@@ -54,13 +55,13 @@ export function AdminProductForm({ umkms, onSuccess, initialData }: AdminProduct
     let result;
 
     if (initialData) {
-       result = await updateProduct(initialData.id, data)
+      result = await updateProduct(initialData.id, data)
     } else {
-       result = await createProduct(data)
+      result = await createProduct(data)
     }
 
     setIsLoading(false)
-     if (result.error) {
+    if (result.error) {
       toast.error(result.error)
     } else {
       toast.success(initialData ? "Produk Diupdate" : "Produk Dibuat")
@@ -68,18 +69,22 @@ export function AdminProductForm({ umkms, onSuccess, initialData }: AdminProduct
       if (onSuccess) onSuccess()
     }
   }
+
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nameValue = e.target.value
     form.setValue("name", nameValue)
-    // Tambahkan suffix random angka biar unik kalau nama produk pasaran
-    const slug = generateSlug(nameValue) + "-" + Math.floor(Math.random() * 1000)
-    form.setValue("slug", slug)
+    // Update slug otomatis hanya jika mode create (opsional)
+    // Atau biarkan selalu update tapi hati-hati menimpa slug custom
+    if (!initialData) {
+      const slug = generateSlug(nameValue) + "-" + Math.floor(Math.random() * 1000)
+      form.setValue("slug", slug)
+    }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        
+
         {/* UMKM SELECT */}
         <FormField
           control={form.control}
@@ -112,7 +117,6 @@ export function AdminProductForm({ umkms, onSuccess, initialData }: AdminProduct
             <FormItem>
               <FormLabel>Nama Produk</FormLabel>
               <FormControl>
-                {/* Gunakan handleNameChange */}
                 <Input placeholder="Nasi Uduk" {...field} onChange={handleNameChange} />
               </FormControl>
               <FormMessage />
@@ -121,42 +125,41 @@ export function AdminProductForm({ umkms, onSuccess, initialData }: AdminProduct
         />
 
         <div className="grid grid-cols-2 gap-4">
-            {/* SLUG */}
-            <FormField
+          {/* SLUG */}
+          <FormField
             control={form.control}
             name="slug"
             render={({ field }) => (
-                <FormItem>
+              <FormItem>
                 <FormLabel>Slug (Unik)</FormLabel>
                 <FormControl>
-                    <Input {...field} />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
-                </FormItem>
+              </FormItem>
             )}
-            />
-            
-            {/* PRICE */}
-            <FormField
+          />
+
+          {/* PRICE */}
+          <FormField
             control={form.control}
             name="price"
             render={({ field }) => (
-                <FormItem>
+              <FormItem>
                 <FormLabel>Harga (Rp)</FormLabel>
                 <FormControl>
-                    <Input 
-                        type="number" 
-                        placeholder="15000"
-                        {...field}
-                        value={field.value as number} 
-                        // Handle perubahan input angka
-                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                    />
+                  <Input
+                    type="number"
+                    placeholder="15000"
+                    {...field}
+                    value={field.value as number}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  />
                 </FormControl>
                 <FormMessage />
-                </FormItem>
+              </FormItem>
             )}
-            />
+          />
         </div>
 
         {/* DESKRIPSI */}
@@ -174,15 +177,20 @@ export function AdminProductForm({ umkms, onSuccess, initialData }: AdminProduct
           )}
         />
 
-        {/* IMAGE */}
+        {/* 👇 2. IMAGE UPLOAD SECTION */}
         <FormField
           control={form.control}
           name="imageUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Foto URL</FormLabel>
+              <FormLabel>Foto Produk</FormLabel>
               <FormControl>
-                <Input placeholder="https://..." {...field} value={field.value || ""} />
+                <ImageUpload
+                  value={field.value || ""}
+                  onChange={(url) => field.onChange(url)}
+                  disabled={isLoading}
+                  label="Upload Foto Produk"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -214,8 +222,8 @@ export function AdminProductForm({ umkms, onSuccess, initialData }: AdminProduct
         />
 
         <Button type="submit" className="w-full" disabled={isLoading}>
-        {initialData ? "Simpan Perubahan" : "Buat Produk Baru"}
-    </Button>
+          {isLoading ? "Menyimpan..." : (initialData ? "Simpan Perubahan" : "Buat Produk Baru")}
+        </Button>
       </form>
     </Form>
   )

@@ -6,6 +6,7 @@ import { Plus, Trash2, Eye, Calendar } from "lucide-react"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
 import { deleteEvent, toggleEventStatus } from "@/features/events/server/action"
+import { PageContainer } from "@/components/layout/PageContainer"
 
 export const dynamic = "force-dynamic"
 
@@ -15,20 +16,17 @@ export default async function AdminEventListPage() {
   })
 
   return (
-    <div className="p-6 md:p-8 max-w-7xl mx-auto">
-
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-[#1F3D2B]">Kelola Kabar & Event</h1>
-          <p className="text-muted-foreground">List artikel dan kegiatan warga Gunung Putri.</p>
-        </div>
+    <PageContainer
+      title="Kelola Kabar & Event"
+      description="List artikel dan kegiatan warga Gunung Putri."
+      action={
         <Button asChild className="bg-[#1F3D2B] hover:bg-[#152b1e]">
           <Link href="/admin/events/create">
             <Plus className="mr-2 h-4 w-4" /> Buat Baru
           </Link>
         </Button>
-      </div>
+      }
+    >
 
       {/* TABLE CARD */}
       <div className="bg-white border rounded-xl shadow-sm overflow-hidden">
@@ -115,6 +113,7 @@ export default async function AdminEventListPage() {
           </table>
         </div>
       </div>
-    </div>
+    </PageContainer>
+
   )
 }

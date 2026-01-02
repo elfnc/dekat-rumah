@@ -12,6 +12,7 @@ import { StatusBadge } from "@/components/shared/status-badge"
 import { EditProductButton } from "@/features/products/components/EditProductButton"
 import { AlertDeleteBtn } from "@/components/shared/alert-delete-btn"
 import { deleteProduct } from "@/features/products/actions/ProductActions"
+import { PageContainer } from "@/components/layout/PageContainer"
 
 const ITEMS_PER_PAGE = 10
 
@@ -49,16 +50,13 @@ export default async function AdminProductsPage({
 
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE)
 
+
+
   return (
-    <div className="space-y-6">
-      {/* HEADER */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Kelola Produk</h1>
-          <p className="text-muted-foreground text-sm">
-            Total {totalCount} produk ditemukan.
-          </p>
-        </div>
+    <PageContainer
+      title="Kelola Produk"
+      description={`Total ${totalCount} produk ditemukan.`}
+      action={
         <Dialog>
           <DialogTrigger asChild>
             <Button className="shadow-lg shadow-primary/20">
@@ -72,7 +70,8 @@ export default async function AdminProductsPage({
             <AdminProductForm umkms={umkms} />
           </DialogContent>
         </Dialog>
-      </div>
+      }
+    >
 
       {/* FILTER & SEARCH BAR */}
       <div className="flex flex-col md:flex-row items-center gap-4 bg-white p-2 rounded-sm border shadow-sm">
@@ -149,6 +148,7 @@ export default async function AdminProductsPage({
           hasNextPage={page < totalPages}
         />
       </div>
-    </div>
+
+    </PageContainer >
   )
 }

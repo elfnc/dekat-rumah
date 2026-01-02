@@ -10,6 +10,7 @@ import { StatusBadge } from "@/components/shared/status-badge"
 import { AlertDeleteBtn } from "@/components/shared/alert-delete-btn"
 import { deleteUmkm } from "@/features/umkm/actions/UmkmActions"
 import { EditUmkmButton } from "@/features/umkm/components/EditUmkmButton"
+import { PageContainer } from "@/components/layout/PageContainer"
 
 
 export default async function AdminUmkmPage({
@@ -35,30 +36,25 @@ export default async function AdminUmkmPage({
   const categories = await prisma.category.findMany()
 
   return (
-    <div className="space-y-6">
-      {/* HEADER: Title + Actions */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Kelola UMKM</h1>
-          <p className="text-muted-foreground text-sm">Daftar mitra warung dan jasa lokal.</p>
-        </div>
-        <div className="flex items-center gap-2">
-          {/* ADD BUTTON */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="shadow-lg shadow-primary/20">
-                <Plus className="mr-2 h-4 w-4" /> Tambah UMKM
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Tambah UMKM Baru</DialogTitle>
-              </DialogHeader>
-              <AdminUmkmForm categories={categories} />
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
+    <PageContainer
+      title="Kelola UMKM"
+      description="Daftar mitra warung dan jasa lokal."
+      action={
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="shadow-lg shadow-primary/20">
+              <Plus className="mr-2 h-4 w-4" /> Tambah UMKM
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Tambah UMKM Baru</DialogTitle>
+            </DialogHeader>
+            <AdminUmkmForm categories={categories} />
+          </DialogContent>
+        </Dialog>
+      }
+    >
 
       {/* FILTER BAR */}
       <div className="flex items-center gap-4 bg-white p-4 rounded-xl border shadow-sm">
@@ -128,6 +124,7 @@ export default async function AdminUmkmPage({
           </TableBody>
         </Table>
       </div>
-    </div>
+    </PageContainer>
+
   )
 }

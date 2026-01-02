@@ -6,7 +6,7 @@ import { umkmSchema, UmkmFormValues } from "@/lib/schemas"
 import { createUmkm, updateUmkm } from "../actions/UmkmActions"
 import { toast } from "sonner"
 import { useState } from "react"
-import { generateSlug } from "@/lib/utils" 
+import { generateSlug } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -18,6 +18,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from "@/components/ui/select"
 import { Umkm } from "@prisma/client"
+import { ImageUpload } from "@/components/shared/image-upload"
 
 interface Category {
   id: string;
@@ -69,7 +70,7 @@ export function AdminUmkmForm({ categories, onSuccess, initialData }: AdminUmkmF
       // MODE CREATE
       result = await createUmkm(data)
     }
-    
+
     setIsLoading(false)
 
     if (result.error) {
@@ -84,7 +85,7 @@ export function AdminUmkmForm({ categories, onSuccess, initialData }: AdminUmkmF
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        
+
         {/* ROW 1: Nama & Slug */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
@@ -118,44 +119,44 @@ export function AdminUmkmForm({ categories, onSuccess, initialData }: AdminUmkmF
 
         {/* ROW 2: Kategori & Telepon */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
+          <FormField
             control={form.control}
             name="categoryId"
             render={({ field }) => (
-                <FormItem>
+              <FormItem>
                 <FormLabel>Kategori</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
+                  <FormControl>
                     <SelectTrigger>
-                        <SelectValue placeholder="Pilih..." />
+                      <SelectValue placeholder="Pilih..." />
                     </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
+                  </FormControl>
+                  <SelectContent>
                     {categories.map((cat) => (
-                        <SelectItem key={cat.id} value={cat.id}>
+                      <SelectItem key={cat.id} value={cat.id}>
                         {cat.name}
-                        </SelectItem>
+                      </SelectItem>
                     ))}
-                    </SelectContent>
+                  </SelectContent>
                 </Select>
                 <FormMessage />
-                </FormItem>
+              </FormItem>
             )}
-            />
+          />
 
-            <FormField
+          <FormField
             control={form.control}
             name="phone"
             render={({ field }) => (
-                <FormItem>
+              <FormItem>
                 <FormLabel>WhatsApp (62...)</FormLabel>
                 <FormControl>
                   <Input type="number" {...field} />
                 </FormControl>
                 <FormMessage />
-                </FormItem>
+              </FormItem>
             )}
-            />
+          />
         </div>
 
         <FormField
@@ -185,15 +186,20 @@ export function AdminUmkmForm({ categories, onSuccess, initialData }: AdminUmkmF
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="imageUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Foto URL (Opsional)</FormLabel>
+              <FormLabel>Foto (Opsional)</FormLabel>
               <FormControl>
-                <Input placeholder="https://..." {...field} />
+                <ImageUpload
+                  value={field.value || ""}
+                  onChange={(url) => field.onChange(url)}
+                  disabled={isLoading}
+                  label="Upload Foto UMKM"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -223,8 +229,8 @@ export function AdminUmkmForm({ categories, onSuccess, initialData }: AdminUmkmF
         />
 
         <Button type="submit" className="w-full font-semibold" disabled={isLoading}>
-        {isLoading ? "Menyimpan..." : (initialData ? "Update Data UMKM" : "Simpan Data UMKM")}
-    </Button>
+          {isLoading ? "Menyimpan..." : (initialData ? "Update Data UMKM" : "Simpan Data UMKM")}
+        </Button>
       </form>
     </Form>
   )

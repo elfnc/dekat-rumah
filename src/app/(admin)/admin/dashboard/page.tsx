@@ -1,13 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Store, Package, DollarSign, Users } from "lucide-react"
+import { PageContainer } from "@/components/layout/PageContainer"
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-primary">Dashboard</h1>
-        <p className="text-muted-foreground">Selamat datang kembali, Admin.</p>
-      </div>
+    <PageContainer
+      title="Dashboard"
+      description="Selamat datang kembali, Admin."
+    >
 
       {/* STATS GRID */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -33,6 +33,6 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </PageContainer>
   )
 }
