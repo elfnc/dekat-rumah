@@ -19,10 +19,10 @@ const eventSchema = z.object({
 export async function createEvent(formData: FormData) {
   const rawData = {
     title: formData.get("title"),
-    excerpt: formData.get("excerpt"),
+    excerpt: formData.get("excerpt") || undefined,
     content: formData.get("content"),
-    imageUrl: formData.get("imageUrl"),
-    location: formData.get("location"),
+    imageUrl: formData.get("imageUrl") || undefined,
+    location: formData.get("location") || undefined,
     startDate: formData.get("startDate"),
     isActive: formData.get("isActive") === "on",
   }
