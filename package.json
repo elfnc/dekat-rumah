@@ -10,7 +10,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:load": "./bin/k6 run k6/load-test.js",
-    "test:stress": "./bin/k6 run k6/stress-test.js"
+    "test:stress": "./bin/k6 run k6/stress-test.js",
+    "test:auth": "./bin/k6 run k6/auth-test.js"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

@@ -92,5 +92,42 @@ Mohon informasinya jika ada yang perlu dilengkapi. Terima kasih 🙏`,
     ],
     CLOSING:
       "Jika platform ini bermanfaat, dukungan kecil atau membagikannya ke lingkungan sekitar sudah sangat membantu.",
-  }
+  },
+
+  ABOUT_PAGE: {
+    HEADLINE: "Kenapa Sulit Menemukan\nUsaha di Sekitar Kita?",
+    PROBLEM_PARAGRAPHS: [
+      "Saat membutuhkan tukang AC, snack box untuk acara keluarga, atau jasa laundry, sering kali kita harus mencari lewat chat panjang di grup WhatsApp RT atau RW.",
+      "Informasi mudah tertimbun, kontak hilang, atau kita tidak menyadari bahwa ada tetangga di sekitar yang menyediakan layanan atau produk yang kita butuhkan.",
+      "Padahal, perputaran ekonomi yang sehat sering dimulai dari warga yang saling mendukung."
+    ],
+    SOLUTION_TITLE: "Satu Platform untuk Lingkungan Sekitar.",
+    SOLUTION_DESC:
+      "Marketplace Gunung Putri hadir sebagai direktori digital sederhana agar usaha warga lokal lebih mudah ditemukan dan dihubungi. Bukan untuk menyaingi marketplace besar.",
+    VALUES: [
+      {
+        TITLE: "Tanpa Biaya Admin",
+        DESC:
+          "Transaksi berlangsung langsung antara pembeli dan penjual melalui WhatsApp, tanpa potongan apa pun."
+      },
+      {
+        TITLE: "Mudah Digunakan",
+        DESC:
+          "Tidak perlu mengunduh aplikasi atau membuat akun. Cukup buka situs dan hubungi penjual."
+      },
+      {
+        TITLE: "Fokus UMKM Lokal",
+        DESC:
+          "Memprioritaskan usaha warga Gunung Putri agar perputaran ekonomi tetap di lingkungan sekitar."
+      }
+    ],
+    DEV_SECTION: {
+      TITLE: "Tentang Pengembang",
+      STORY:
+        "Platform ini dikembangkan secara mandiri oleh warga lokal yang berprofesi sebagai Software Engineer, dibangun di sela waktu luang tanpa investor.",
+      QUOTE:
+        "\"Tujuannya sederhana: membantu usaha tetangga lebih mudah ditemukan.\""
+    }
+  },
+
 };
