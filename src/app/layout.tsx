@@ -65,12 +65,21 @@ export const metadata: Metadata = {
     siteName: 'DekatRumah',
     locale: 'id_ID',
     type: 'website',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'DekatRumah Preview',
+      },
+    ],
   },
 
   twitter: {
     card: 'summary_large_image',
     title: "DekatRumah — Support Usaha Tetangga",
     description: "Temukan produk dan jasa dari warga sekitar Gunung Putri.",
+    images: ['/opengraph-image.png'],
   },
 
   icons: {

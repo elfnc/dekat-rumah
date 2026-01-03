@@ -127,7 +127,7 @@ export default async function HomePage() {
                     category={umkm.category.name}
                     address={umkm.address}
                     productCount={umkm._count.products}
-                    coverImage={umkm.products[0]?.imageUrl}
+                    coverImage={umkm.imageUrl}
                     operationalHours={umkm.operationalHours}
                   />
                 </Motion>
