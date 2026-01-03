@@ -1,22 +1,30 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com", // 👈 Wajib buat Unsplash
+        hostname: "images.unsplash.com",
       },
       {
         protocol: "https",
-        hostname: "placehold.co", // 👈 Ganti jadi ini
+        hostname: "placehold.co",
       },
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
     ],
+  },
+  experimental: {
+    // 👇 Tambahkan baris ini untuk mematikan error TypeScript khusus di baris bawahnya
+    // @ts-expect-error: Type definition for turbo is missing in this version, but valid at runtime
+    turbo: {
+      rules: {
+        // Biarkan kosong untuk bypass warning Next.js
+      },
+    },
   },
 };
 

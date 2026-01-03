@@ -1,23 +1,16 @@
-export function Logo({ className = "h-8 w-auto" }: { className?: string }) {
+import Image from "next/image"
+
+export function Logo({ className = "h-8 w-8" }: { className?: string }) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 100 100"
-      fill="none"
-      className={className}
-      aria-label="Gunung Putri Marketplace"
-    >
-      {/* Gunung (Primary Green) */}
-      <path
-        d="M50 20L10 90H90L50 20Z"
-        fill="#1F3D2B"
-        stroke="#1F3D2B"
-        strokeWidth="4"
-        strokeLinejoin="round"
+    // Wrapper div relative untuk menghandle ukuran dari prop className
+    <div className={`relative ${className}`}>
+      <Image
+        src="/logo.svg"
+        alt="Logo DekatRumah"
+        fill // Agar otomatis ngisi wrapper div
+        className="object-contain" // Agar logo tidak gepeng
+        priority // Loading prioritas karena ini LCP (Largest Contentful Paint)
       />
-      {/* Aksen Daun/Matahari (Terracotta) - Simbol Lokal/Hangat */}
-      <circle cx="50" cy="55" r="12" fill="#F4F1EC" />
-      <circle cx="50" cy="55" r="8" fill="#C56A4A" />
-    </svg>
+    </div>
   )
 }
