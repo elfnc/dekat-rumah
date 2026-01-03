@@ -61,6 +61,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "DekatRumah — UMKM Gunung Putri",
     description: "Biar usaha dekat rumah lebih gampang dicari. Langsung WA, tanpa aplikasi ribet.",
+    url: '/',
     siteName: 'DekatRumah',
     locale: 'id_ID',
     type: 'website',
