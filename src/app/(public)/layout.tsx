@@ -1,6 +1,9 @@
 import { PublicNavbar } from "@/components/layout/PublicNavbar"
+import { Logo } from "@/components/brand/logo" // 👈 Pastikan import ini
 import { COPY } from "@/lib/copywritting"
 import Link from "next/link"
+import { Heart, MapPin, ExternalLink } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export default function PublicLayout({
   children,
@@ -8,60 +11,101 @@ export default function PublicLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-secondary/30">
+    <div className="flex min-h-screen flex-col bg-[#FAFAFA]">
       <PublicNavbar />
+
       <main className="flex-1">
         {children}
       </main>
 
-      <footer className="border-t border-[#E6E3DF] bg-white py-12 mt-auto">
+      {/* FOOTER MODERN */}
+      <footer className="bg-[#F4F1EC] border-t border-[#E6E3DF] pt-16 pb-8">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col items-center text-center space-y-6">
 
-            {/* 1. Brand & Tagline */}
-            <div>
-              <h4 className="font-bold text-lg text-[#1F3D2B] mb-2 tracking-tight">
-                {COPY.FOOTER.BRAND}
-              </h4>
-              <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+          {/* TOP SECTION: Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+
+            {/* COLUMN 1: Brand Identity (4 cols) */}
+            <div className="md:col-span-5 space-y-6">
+              <Link href="/" className="inline-block group">
+                <div className="flex items-center gap-3">
+                  {/* ✅ LOGO ASLI (Konsisten dengan Navbar) */}
+                  <div className="h-10 w-10 bg-white border border-[#1F3D2B]/10 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                    <Logo className="h-6 w-6" />
+                  </div>
+                  <span className="text-xl font-bold text-[#1F3D2B]">DekatRumah<span className="text-[#C56A4A]">.</span></span>
+                </div>
+              </Link>
+
+              <p className="text-muted-foreground leading-relaxed max-w-sm text-sm">
                 {COPY.FOOTER.TAGLINE}
+                <br />
+                Membantu perputaran ekonomi warga Gunung Putri agar tetap tumbuh di lingkungan sendiri.
               </p>
+
+              <div className="flex items-center gap-2 text-sm font-medium text-[#1F3D2B]/80 bg-white/50 w-fit px-3 py-1.5 rounded-full border border-[#1F3D2B]/10">
+                <MapPin className="h-4 w-4 text-[#C56A4A]" />
+                Gunung Putri, Bogor
+              </div>
             </div>
 
-            {/* 2. Navigation Links (Menu Bawah) */}
-            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium text-gray-600">
-              <Link href="/produk" className="hover:text-[#1F3D2B] transition-colors">
-                Jajanan & Produk
-              </Link>
-              <Link href="/umkm" className="hover:text-[#1F3D2B] transition-colors">
-                Direktori UMKM
-              </Link>
-              <Link href="/events" className="hover:text-[#1F3D2B] transition-colors">
-                Kabar Warga
-              </Link>
-              {/* 👇 Link Baru */}
-              <Link href="/tentang" className="hover:text-[#1F3D2B] transition-colors">
-                Tentang Platform
-              </Link>
-            </nav>
+            {/* COLUMN 2: Platform Links (2-3 cols) */}
+            <div className="md:col-span-3 space-y-4">
+              <h4 className="font-bold text-[#1C1C1C]">Platform</h4>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li>
+                  <Link href="/produk" className="hover:text-[#1F3D2B] transition-colors">Jajanan & Produk</Link>
+                </li>
+                <li>
+                  <Link href="/umkm" className="hover:text-[#1F3D2B] transition-colors">Direktori UMKM</Link>
+                </li>
+                <li>
+                  <Link href="/events" className="hover:text-[#1F3D2B] transition-colors">Info Warga</Link>
+                </li>
+                <li>
+                  <Link href="/tentang" className="hover:text-[#1F3D2B] transition-colors">Tentang Kami</Link>
+                </li>
+              </ul>
+            </div>
 
-            {/* 3. Call to Action (Support) */}
-            <div>
-              <Link
-                href="/dukung"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-[#C56A4A] hover:text-[#a05236] transition-colors bg-[#C56A4A]/10 px-4 py-2 rounded-full hover:bg-[#C56A4A]/20"
+            {/* COLUMN 3: Community & Support (4 cols) */}
+            <div className="md:col-span-4 space-y-4">
+              <h4 className="font-bold text-[#1C1C1C]">Dukungan & Komunitas</h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Platform ini dikelola secara mandiri. Dukunganmu membantu kami membayar biaya server.
+              </p>
+              <Button
+                variant="outline"
+                className="w-full sm:w-auto border-[#C56A4A] text-[#C56A4A] hover:bg-[#C56A4A] hover:text-white transition-all gap-2"
+                asChild
               >
-                <span>☕</span> Dukung Project Ini
-              </Link>
+                <Link href="/dukung">
+                  <Heart className="h-4 w-4" />
+                  Dukung Project Ini
+                </Link>
+              </Button>
+
+              <div className="pt-4 mt-4 border-t border-gray-200">
+                <Link href={`https://wa.me/${COPY.CONTACT.ADMIN_WA}`} target="_blank" className="text-sm text-muted-foreground hover:text-[#1F3D2B] flex items-center gap-1 group">
+                  Butuh bantuan? <span className="underline decoration-dotted group-hover:text-[#1F3D2B]">Chat Admin</span> <ExternalLink className="h-3 w-3" />
+                </Link>
+              </div>
             </div>
 
-            {/* 4. Copyright */}
-            <div className="pt-6 border-t border-gray-100 w-full text-center max-w-lg mx-auto">
-              <p className="text-xs text-muted-foreground/60">
-                &copy; {new Date().getFullYear()} Gunung Putri Marketplace. Dibuat dengan hati untuk ekonomi lokal.
-              </p>
+          </div>
+
+          {/* BOTTOM SECTION: Copyright */}
+          <div className="border-t border-[#1F3D2B]/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+            <p>&copy; {new Date().getFullYear()} DekatRumah. All rights reserved.</p>
+            <div className="flex items-center gap-1">
+              <span>Developed by</span>
+              <a href="https://github.com/eldevs" target="_blank" className="font-medium text-[#1F3D2B] hover:underline">
+                Eldevs
+              </a>
+              <span>— for the community.</span>
             </div>
           </div>
+
         </div>
       </footer>
     </div>
