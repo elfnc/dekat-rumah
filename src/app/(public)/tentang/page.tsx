@@ -2,19 +2,22 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Heart, ShieldCheck, MapPin, Zap, Coffee } from "lucide-react"
-import { COPY } from "@/lib/copywritting" // 👈 Import Config
+import { COPY } from "@/lib/copywritting"
 import { Motion } from "@/components/shared/Motion"
 import { fadeInUp, scaleIn, slideInLeft, slideInRight, staggerContainer } from "@/lib/animations"
 
 export const metadata: Metadata = {
-    title: "Tentang Platform - Marketplace Gunung Putri",
+    title: "Tentang DekatRumah - Marketplace Warga",
     description: "Kenapa marketplace ini dibuat? Dari warga, untuk warga Gunung Putri.",
 }
 
 export default function AboutPage() {
     const content = COPY.ABOUT_PAGE
 
-    // Ikon manual mapping biar tetap rapi di code
+    // Ikon manual mapping sesuai urutan VALUES di copywriting
+    // 1. Tanpa Biaya (Shield)
+    // 2. Praktis (Zap)
+    // 3. Fokus Lingkungan (MapPin)
     const icons = [ShieldCheck, Zap, MapPin]
 
     return (

@@ -12,36 +12,39 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#1F3D2B",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 1,
 };
 
 export const metadata: Metadata = {
+  // Ganti domain ini nanti jika sudah beli domain (misal dekatrumah.id)
   metadataBase: new URL('https://marketplace-gunung-putri.vercel.app'),
 
   title: {
-    default: "Marketplace UMKM Gunung Putri | Jajanan & Jasa Lokal",
-    template: "%s | Marketplace Gunung Putri",
+    default: "DekatRumah | Direktori UMKM & Jasa Gunung Putri",
+    template: "%s | DekatRumah",
   },
 
-  description: "Pusat jajanan, jasa, laundry, dan produk kreatif warga Gunung Putri, Bogor. Dukung usaha tetangga, belanja lebih dekat tanpa aplikasi.",
+  description: "Cari makanan, laundry, jasa, dan produk tetangga di Gunung Putri lebih mudah. Langsung chat WhatsApp, tanpa biaya admin.",
 
   keywords: [
+    "DekatRumah",
     "UMKM Gunung Putri",
-    "Kuliner Gunung Putri",
-    "Jajanan Bogor",
-    "Marketplace Warga",
+    "Jajanan Gunung Putri",
+    "Info Warga Gunung Putri",
     "Cikeas",
     "Tlajung Udik",
     "Wanaherang",
     "Cicadas",
-    "Jual beli online Gunung Putri"
+    "Jasa Service AC Gunung Putri",
+    "Laundry Terdekat"
   ],
 
-  authors: [{ name: "Komunitas Warga Gunung Putri" }],
+  authors: [{ name: "DekatRumah Team" }],
   creator: "Eldevs",
-  publisher: "Marketplace Gunung Putri",
+  publisher: "DekatRumah",
 
   robots: {
     index: true,
@@ -56,18 +59,17 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Marketplace UMKM Gunung Putri",
-    description: "Belanja produk tetangga lebih mudah. Langsung WA penjual.",
-    url: 'https://marketplace-gunung-putri.vercel.app',
-    siteName: 'Marketplace Gunung Putri',
+    title: "DekatRumah — UMKM Gunung Putri",
+    description: "Biar usaha dekat rumah lebih gampang dicari. Langsung WA, tanpa aplikasi ribet.",
+    siteName: 'DekatRumah',
     locale: 'id_ID',
     type: 'website',
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: "Marketplace UMKM Gunung Putri",
-    description: "Dukung usaha lokal tetangga.",
+    title: "DekatRumah — Support Usaha Tetangga",
+    description: "Temukan produk dan jasa dari warga sekitar Gunung Putri.",
   },
 
   icons: {
@@ -78,10 +80,6 @@ export const metadata: Metadata = {
 
   verification: {
     google: "sb6Yv_RS5nvNbsliFL_rBMOpggLc87IVR7aPsvHOH2Y",
-  },
-
-  alternates: {
-    canonical: '/',
   },
 };
 
