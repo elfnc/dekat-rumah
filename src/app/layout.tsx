@@ -20,7 +20,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   // Ganti domain ini nanti jika sudah beli domain (misal dekatrumah.id)
-  metadataBase: new URL('https://marketplace-gunung-putri.vercel.app'),
+  metadataBase: new URL('https://dekat-rumah.vercel.app'),
 
   title: {
     default: "DekatRumah | Direktori UMKM & Jasa Gunung Putri",

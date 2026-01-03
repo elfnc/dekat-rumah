@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://marketplace-gunung-putri.vercel.app' // Ganti dengan domain aslimu jika sudah beli
+  const baseUrl = 'https://dekat-rumah.vercel.app'
 
   // 1. Ambil Data UMKM & Produk dari Database
   const umkms = await prisma.umkm.findMany({
