@@ -4,6 +4,7 @@ import "./globals.css";
 import QueryProvider from "@/providers/queryProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { PwaPrompt } from "@/components/pwa/PwaPrompt";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -107,6 +108,7 @@ export default function RootLayout({
           <Toaster position="top-center" richColors />
         </QueryProvider>
       </body>
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
     </html>
   );
 }
